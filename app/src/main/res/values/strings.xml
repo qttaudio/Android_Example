@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">QTT开发者示例DEMO</string>
+    <string name="longin_view_title">QttAudio · 音频语聊Demo</string>
+    <string name="longin_view_subheading">让你的应用能通话</string>
+    <string name="longin_view_input_roomid_hint">请输入房间号</string>
+    <string name="close_mic">静麦</string>
+    <string name="turn_off_the_sound">关闭声音</string>
+    <string name="switch_speaker">关闭外放</string>
+    <string name="Music_and_effects">背景音乐</string>
+    <string name="play_music">播放音乐</string>
+    <string name="change_pcm_audio">修改原始音频数据</string>
+    <string name="exit">退出</string>
+    <string name="close">关闭</string>
+    <string name="bgm_name">夜的钢琴曲</string>
+    <string name="set_echo">耳返设置：</string>
+    <string name="open_echo">开启耳返</string>
+    <string name="laughter">大笑声效</string>
+    <string name="cry">哭声音效</string>
+    <string name="custom_audio">自定义音频采集与渲染:</string>
+    <string name="default_no_deal_with">默认(不处理)</string>
+    <string name="custom">自定义</string>
+    <string name="joinroom">进入房间</string>
+    <string name="login_tip">提示：请输入任意相同房间号，即可多人会话</string>
+
+</resources>

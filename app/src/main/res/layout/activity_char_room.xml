@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ChatRoomActivity">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="217dp"
+        android:layout_height="137dp"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/bg" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="217dp"
+        android:layout_height="137dp"
+        android:layout_alignParentBottom="true"
+        android:src="@mipmap/bottom_bg" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/qb_px_15"
+            android:layout_marginTop="@dimen/qb_px_30">
+
+            <LinearLayout
+                android:id="@+id/ll_room_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="@dimen/qb_px_8"
+                android:background="@drawable/shape_rectangle_bg_blue"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/qb_px_26"
+                    android:layout_height="@dimen/qb_px_21"
+                    android:padding="@dimen/qb_px_5"
+                    android:src="@mipmap/home" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_room_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/qb_px_8"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/sp_14" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_people_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/qb_px_15"
+                android:layout_marginTop="@dimen/qb_px_8"
+                android:layout_toRightOf="@id/ll_room_info"
+                android:background="@drawable/shape_rectangle_bg_purple"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="@dimen/qb_px_21"
+                    android:layout_height="@dimen/qb_px_21"
+                    android:padding="@dimen/qb_px_6"
+                    android:src="@mipmap/people_count" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_people_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="0"
+                    android:textColor="#ffffff"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_exit"
+                android:layout_width="@dimen/qb_px_24"
+                android:layout_height="@dimen/qb_px_24"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/qb_px_6"
+                android:layout_marginEnd="@dimen/qb_px_15"
+                android:src="@drawable/icon_exit_svg" />
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycle_rostrum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/qb_px_20"
+            android:layout_marginBottom="@dimen/qb_px_20"
+            android:layout_marginRight="@dimen/qb_px_30"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycle_channel_msg"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_150"
+            android:layout_marginLeft="@dimen/qb_px_18"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/fl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_280"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/qb_px_30">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginRight="@dimen/qb_px_8"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="@dimen/sp_16"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/qb_px_9">
+
+                <CheckBox
+                    android:id="@+id/cb_switch_role"
+                    style="@style/CheckBoxTheme"
+                    android:gravity="center"
+                    android:text="上麦" />
+
+                <CheckBox
+                    android:id="@+id/cb_close_mic"
+                    style="@style/CheckBoxTheme"
+                    android:layout_marginLeft="@dimen/qb_px_24"
+                    android:gravity="center"
+                    android:text="@string/close_mic" />
+
+                <CheckBox
+                    android:id="@+id/cb_remote_mute"
+                    style="@style/CheckBoxTheme"
+                    android:layout_marginLeft="@dimen/qb_px_24"
+                    android:gravity="center"
+                    android:text="@string/turn_off_the_sound" />
+
+                <CheckBox
+                    android:id="@+id/cb_speaker"
+                    style="@style/CheckBoxTheme"
+                    android:layout_marginLeft="@dimen/qb_px_24"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:text="@string/switch_speaker" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="@dimen/sp_16"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/qb_px_9">
+
+                <CheckBox
+                    android:id="@+id/cb_echo"
+                    style="@style/CheckBoxTheme"
+                    android:gravity="center"
+                    android:text="@string/open_echo" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_bmg"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/qb_px_26"
+                    android:layout_marginLeft="@dimen/qb_px_24"
+                    android:layout_weight="1"
+                    android:background="@drawable/shape_rectangle_bg_white"
+                    android:text="@string/Music_and_effects"
+                    android:gravity="center"
+                    android:textSize="@dimen/sp_12"
+                    android:textColor="#ff0091ff" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_laughter"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/qb_px_26"
+                    android:layout_marginLeft="@dimen/qb_px_24"
+                    android:layout_weight="1"
+                    android:background="@drawable/selector_click_bg_style"
+                    android:text="@string/laughter"
+                    android:gravity="center"
+                    android:textSize="@dimen/sp_12"
+                    android:textColor="#ff0091ff" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_cry"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/qb_px_26"
+                    android:layout_marginLeft="@dimen/qb_px_24"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:background="@drawable/selector_click_bg_style"
+                    android:textSize="@dimen/sp_12"
+                    android:text="@string/cry"
+                    android:textColor="#ff0091ff" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ViewStub
+            android:id="@+id/vs_music_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout="@layout/layout_music_content"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</RelativeLayout>

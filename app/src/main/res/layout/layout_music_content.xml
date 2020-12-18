@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_rectangle_frame_gray1"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/qb_px_36"
+        android:layout_marginTop="@dimen/dp_11">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/Music_and_effects"
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/sp_16" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/iv_close"
+            android:layout_width="@dimen/qb_px_24"
+            android:layout_height="@dimen/qb_px_24"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/qb_px_15"
+            android:onClick="exit"
+            android:src="@drawable/icon_exit_black_svg" />
+
+
+    </RelativeLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/bgm_name"
+                    android:textColor="@color/color_ff0091ff"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_marginStart="@dimen/qb_px_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/qb_px_13"
+                    android:layout_marginEnd="18dp"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_music_progress"
+                        android:layout_width="@dimen/dp_35"
+                        android:layout_height="wrap_content"
+                        android:text="00:00"
+                        android:textColor="#000000"
+                        android:textSize="@dimen/sp_12" />
+
+                    <androidx.appcompat.widget.AppCompatSeekBar
+                        android:id="@+id/sb_music_progress"
+                        style="@style/AppCompatSeekBarStyle" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_music_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/qb_px_5"
+                        android:text="00:00"
+                        android:textColor="#000000"
+                        android:textSize="@dimen/sp_12" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/qb_px_10"
+                    android:layout_marginBottom="@dimen/qb_px_5"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_play_music"
+                        android:layout_width="@dimen/qb_px_30"
+                        android:layout_height="@dimen/qb_px_30"
+                        android:gravity="center"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/play" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_stop_music"
+                        android:layout_width="@dimen/qb_px_30"
+                        android:layout_height="@dimen/qb_px_30"
+                        android:layout_marginStart="@dimen/qb_px_12"
+                        android:gravity="center"
+                        android:src="@mipmap/stop" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/qb_px_10"
+                android:layout_marginBottom="@dimen/qb_px_20"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/qb_px_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextSeekProgressTheme"
+                        android:text="音乐" />
+
+                    <SeekBar
+                        android:id="@+id/sb_music_volume"
+                        style="@style/AppCompatSeekBarStyle"
+                        android:max="100"
+                        android:progress="100" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_music_volume"
+                        android:layout_width="@dimen/qb_px_30"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/qb_px_5"
+                        android:layout_marginRight="@dimen/qb_px_10"
+                        android:text="100"
+                        android:textSize="@dimen/sp_16" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/qb_px_20"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextSeekProgressTheme"
+                        android:text="人声" />
+
+                    <SeekBar
+                        android:id="@+id/sb_vocal"
+                        style="@style/AppCompatSeekBarStyle"
+                        android:max="100"
+                        android:progress="100" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_vocal"
+                        android:layout_width="@dimen/qb_px_30"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/qb_px_5"
+                        android:layout_marginRight="@dimen/qb_px_10"
+                        android:text="100"
+                        android:textSize="@dimen/sp_16" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="@dimen/qb_px_20"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        style="@style/TextSeekProgressTheme"
+                        android:text="音调"
+                        />
+
+                    <SeekBar
+                        android:id="@+id/sb_tone"
+                        style="@style/AppCompatSeekBarStyle"
+                        android:max="24"
+                        android:progress="12" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_tone"
+                        android:layout_width="@dimen/qb_px_30"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/qb_px_5"
+                        android:layout_marginRight="@dimen/qb_px_10"
+                        android:text="0"
+                        android:textSize="@dimen/sp_16" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

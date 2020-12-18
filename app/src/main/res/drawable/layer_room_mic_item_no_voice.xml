@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:width="18dp"
+        android:height="18dp"
+        android:drawable="@drawable/icon_trumpet_svg"></item>
+
+    <item
+        android:left="8.5dp"
+        android:right="8.5dp">
+        <rotate android:fromDegrees="45">
+            <shape>
+                <solid android:color="@android:color/black" />
+                <corners android:radius="1dp" />
+            </shape>
+
+        </rotate>
+    </item>
+
+
+</layer-list>

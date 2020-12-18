@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_marginTop="@dimen/qb_px_5"
+    android:layout_marginBottom="@dimen/qb_px_5"
+    android:layout_marginLeft="@dimen/qb_px_30"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.example.qttexample.utils.WaveView
+            android:id="@+id/wv_speaker"
+            android:layout_gravity="center"
+            android:layout_width="@dimen/qb_px_60"
+            android:layout_height="@dimen/qb_px_60"/>
+
+        <RelativeLayout
+            android:layout_gravity="center"
+            android:background="@mipmap/item_mic_bg"
+            android:layout_width="@dimen/qb_px_48"
+            android:layout_height="@dimen/qb_px_48">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="@dimen/qb_px_16"
+                android:layout_height="@dimen/qb_px_16"
+                android:layout_centerInParent="true"
+                android:padding="0.3dp"
+                android:src="@mipmap/plus"
+                />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="0.3dp"
+                android:background="@drawable/shape_hollow_circle"
+                />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_close_mic"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/shape_circle_gb_blue"
+                android:src="@drawable/icon_close_mic_svg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+    </FrameLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_name"
+        android:gravity="center"
+        android:textSize="10sp"
+        android:textColor="#ff272b30"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_trumpet_value"
+        android:drawableStart="@drawable/icon_trumpet_bg_blue_svg"
+        android:drawablePadding="2dp"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:textSize="@dimen/sp_12"
+        android:textColor="#ff272b30"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

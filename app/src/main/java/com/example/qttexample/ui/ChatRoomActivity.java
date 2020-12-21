@@ -41,6 +41,7 @@ import com.qttaudio.sdk.channel.ChannelEngine;
 import com.qttaudio.sdk.channel.ChannelFactory;
 import com.qttaudio.sdk.channel.ChannelObserver;
 import com.qttaudio.sdk.channel.ChannelRole;
+import com.qttaudio.sdk.channel.LogLevel;
 import com.qttaudio.sdk.channel.RtcStat;
 import com.qttaudio.sdk.channel.VolumeInfo;
 import com.qttaudio.sdk.headset.HeadsetPlugManager;
@@ -206,6 +207,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
         try {
             ChannelFactory.SetContext(getBaseContext());
             ChannelFactory.SetAppkey(Constant.APP_KEY);//APPKEY
+            ChannelFactory.SetLogLevel(LogLevel.LOG_MESSAGE);
             ChannelFactory.SetLogFile(FileUtil.initLogFile(this, 0));//LOG日志路径
             mChannelEngine = ChannelFactory.GetChannelInstance();
             if (null == mChannelEngine) {

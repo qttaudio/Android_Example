@@ -102,24 +102,6 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
     private boolean mIsLeave;
     private boolean isUserHeadSet = false;
 
-    public Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-
-            switch (msg.what) {
-                case WHAT_ON_OVER_CONN: //用户报警
-                    Log.i("qtt_debug", "第一个消息是：");
-                    break;
-
-                case WHAT_ON_RECONN: //重连
-                    mReJoinCount++;
-                    Log.i("qtt_debug", "第二个消息是：" + mReJoinCount);
-                    mChannelEngine.join(mRoomName, Constant.TOKEN);
-                    break;
-
-            }
-        }
-    };
     private boolean isAllRemoteMute;
 
     @Override
@@ -207,7 +189,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
         try {
             ChannelFactory.SetContext(getBaseContext());
             ChannelFactory.SetAppkey(Constant.APP_KEY);//APPKEY
-            ChannelFactory.SetLogLevel(LogLevel.LOG_MESSAGE);
+            ChannelFactory.SetLogLevel(LogLevel.LOG_DEBUG);
             ChannelFactory.SetLogFile(FileUtil.initLogFile(this, 0));//LOG日志路径
             mChannelEngine = ChannelFactory.GetChannelInstance();
             if (null == mChannelEngine) {
@@ -394,40 +376,10 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
         return super.onKeyDown(keyCode, event);
     }
 
-    /**
-     * 重连
-     */
-    private void rejoin() {
-        if (handler.hasMessages(WHAT_ON_RECONN)) {
-            return;
-        }
-        if (mReJoinCount < 3) {
-            removeHandlerMessage();
-            handler.sendEmptyMessageDelayed(WHAT_ON_RECONN, 10000);//10秒重连一次
-        } else {
-            removeHandlerMessage();
-            handler.sendEmptyMessage(WHAT_ON_OVER_CONN);
-        }
-    }
-
-    /**
-     * 对id进行移除
-     */
-    private void removeHandlerMessage() {
-        if (handler.hasMessages(WHAT_ON_RECONN)) {
-            handler.removeMessages(WHAT_ON_RECONN);
-        }
-        if (handler.hasMessages(WHAT_ON_OVER_CONN)) {
-            handler.removeMessages(WHAT_ON_OVER_CONN);
-        }
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (handler != null) {
-            handler.removeCallbacksAndMessages(null);
-        }
         ChannelFactory.Destroy();
     }
 
@@ -463,7 +415,6 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
                     mMicItemAdapter.enableCloseMic(uid, mute);
                 }
             });
-            removeHandlerMessage();
             mReJoinCount = 0;
         } else {
             runOnUiThread(new Runnable() {
@@ -538,6 +489,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
             public void run() {
                 for (int i = 0; i < size; i++) {
                     VolumeInfo v = volumeInfos[i];
+                    Log.d(TAG, "run: "+v.volume+"   "+v.uid);
                     mMicItemAdapter.updateVolume(v.uid == 0 ? myUid : v.uid, isAllRemoteMute ? 0 : v.volume);
                 }
                 mMicItemAdapter.notifyDataSetChanged();
@@ -653,8 +605,6 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
                 Toast.makeText(ChatRoomActivity.this, "网络断开，正在重连...", Toast.LENGTH_SHORT).show();
             }
         });
-        removeHandlerMessage();
-        handler.sendEmptyMessageDelayed(WHAT_ON_OVER_CONN, 30000);//总共30秒的自动重连时间
     }
 
     /**
@@ -674,9 +624,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
                 Toast.makeText(ChatRoomActivity.this, "发生错误，code=" + err + "  msg: " + err, Toast.LENGTH_SHORT).show();
             }
         });
-        if (err == 17 || err == 102 || err == 110) {
-            rejoin();
-        }
+
     }
 
     @Override

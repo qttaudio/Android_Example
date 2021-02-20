@@ -1,14 +1,8 @@
 package com.example.qttexample.ui;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -34,8 +28,6 @@ import com.example.qttexample.utils.SpUtil;
 import com.example.qttexample.utils.StatusBarUtil;
 import com.example.qttexample.utils.TimeUtil;
 import com.qttaudio.sdk.channel.AudioMode;
-import com.qttaudio.sdk.channel.AudioOutput;
-import com.qttaudio.sdk.channel.AudioParams;
 import com.qttaudio.sdk.channel.AudioQuality;
 import com.qttaudio.sdk.channel.ChannelEngine;
 import com.qttaudio.sdk.channel.ChannelFactory;
@@ -44,13 +36,6 @@ import com.qttaudio.sdk.channel.ChannelRole;
 import com.qttaudio.sdk.channel.LogLevel;
 import com.qttaudio.sdk.channel.RtcStat;
 import com.qttaudio.sdk.channel.VolumeInfo;
-import com.qttaudio.sdk.headset.HeadsetPlugManager;
-import com.qttaudio.sdk.headset.IHeadsetPlugListener;
-
-import java.lang.reflect.Field;
-
-import static com.example.qttexample.utils.Constant.WHAT_ON_OVER_CONN;
-import static com.example.qttexample.utils.Constant.WHAT_ON_RECONN;
 
 public class ChatRoomActivity extends FragmentActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, ChannelObserver {
 
@@ -230,20 +215,8 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
 
     private int setAudioProfile(int profile, int scenario) {
 
-        AudioQuality quality = AudioQuality.AUDIO_QUALITY_SPEECH_STEREO;
-        AudioMode mode = AudioMode.AUDIO_MODE_CALL;
-
-        if (profile == Constant.AUDIO_PROFILE_SPEECH_STANDARD || profile == Constant.AUDIO_PROFILE_DEFAULT) {
-            quality = AudioQuality.AUDIO_QUALITY_SPEECH_STEREO;
-        } else {
-            quality = AudioQuality.AUDIO_QUALITY_MUSIC_STEREO;
-        }
-
-        if (scenario == Constant.AUDIO_SCENARIO_CHATROOM_GAMING || scenario == Constant.AUDIO_SCENARIO_DEFAULT) {
-            mode = AudioMode.AUDIO_MODE_CALL; //通话模式
-        } else {
-            mode = AudioMode.AUDIO_MODE_MIX;  //上麦通话，下麦媒体
-        }
+        AudioQuality quality = AudioQuality.AUDIO_QUALITY_MUSIC_STEREO;
+        AudioMode mode = AudioMode.AUDIO_MODE_MIX;
 
         return mChannelEngine.setAudioConfig(quality, mode);
     }
@@ -489,7 +462,6 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
             public void run() {
                 for (int i = 0; i < size; i++) {
                     VolumeInfo v = volumeInfos[i];
-                    Log.d(TAG, "run: "+v.volume+"   "+v.uid);
                     mMicItemAdapter.updateVolume(v.uid == 0 ? myUid : v.uid, isAllRemoteMute ? 0 : v.volume);
                 }
                 mMicItemAdapter.notifyDataSetChanged();

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QTT开发者示例DEMO</string>
+    <string name="app_name">Qtt语音</string>
     <string name="longin_view_title">QttAudio · 音频语聊Demo</string>
     <string name="longin_view_subheading">让你的应用能通话</string>
     <string name="longin_view_input_roomid_hint">请输入房间号</string>

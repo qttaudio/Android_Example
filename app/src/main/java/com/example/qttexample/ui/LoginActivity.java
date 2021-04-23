@@ -14,9 +14,12 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.qttexample.R;
@@ -26,6 +29,7 @@ import com.example.qttexample.utils.SpUtil;
 import com.example.qttexample.utils.StatusBarUtil;
 
 import java.io.File;
+import java.lang.reflect.Method;
 
 public class LoginActivity extends AppCompatActivity {
 

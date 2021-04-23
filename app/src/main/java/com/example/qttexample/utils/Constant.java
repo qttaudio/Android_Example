@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 public class Constant {
 
-    public static final String APP_KEY="18140105956";
+    public static final String APP_KEY="";
 
     public static final String TOKEN="";
 

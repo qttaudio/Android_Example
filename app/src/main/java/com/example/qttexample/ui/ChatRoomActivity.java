@@ -174,7 +174,6 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
         try {
             ChannelFactory.SetContext(getBaseContext());
             ChannelFactory.SetAppkey(Constant.APP_KEY);//APPKEY
-            ChannelFactory.SetLogLevel(LogLevel.LOG_DEBUG);
             ChannelFactory.SetLogFile(FileUtil.initLogFile(this, 0));//LOG日志路径
             mChannelEngine = ChannelFactory.GetChannelInstance();
             if (null == mChannelEngine) {
@@ -548,7 +547,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
      */
     @Override
     public void onOtherLeave(final long l, final ChannelRole channelRole) {
-        Log.d(TAG, "onOtherMuted: " + l);
+        Log.d(TAG, "onOtherLeave: " + l);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -601,7 +600,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
 
     @Override
     public void onWarning(int i, String s) {
-
+        Log.d(TAG, "onWarning: code:"+i+",msg:"+s);
     }
 
 

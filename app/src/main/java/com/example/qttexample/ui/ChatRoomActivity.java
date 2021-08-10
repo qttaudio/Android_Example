@@ -37,6 +37,8 @@ import com.qttaudio.sdk.channel.LogLevel;
 import com.qttaudio.sdk.channel.RtcStat;
 import com.qttaudio.sdk.channel.VolumeInfo;
 
+import java.util.Random;
+
 public class ChatRoomActivity extends FragmentActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, ChannelObserver {
 
 
@@ -199,6 +201,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
         AudioQuality quality = AudioQuality.AUDIO_QUALITY_MUSIC_STEREO;
         AudioMode mode = AudioMode.AUDIO_MODE_MIX;
         mChannelEngine.setAudioConfig(quality, mode);
+        mChannelEngine.setUid(new Random().nextInt());
         //设置为观众,回调方法：
         //本地端-》onMuteStatusChanged(),uid==0
         //远端-》onMuteStatusChanged()
@@ -456,7 +459,8 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
             public void run() {
                 for (int i = 0; i < size; i++) {
                     VolumeInfo v = volumeInfos[i];
-                    mMicItemAdapter.updateVolume(v.uid == 0 ? myUid : v.uid, isAllRemoteMute ? 0 : v.volume);
+                    Log.d(TAG, "onTalking: uid: " + v.uid + " volume: " + v.volume);
+                    mMicItemAdapter.updateVolume(v.uid == 0 ? myUid : v.uid, v.uid != 0 && isAllRemoteMute ? 0 : v.volume);
                 }
                 mMicItemAdapter.notifyDataSetChanged();
             }

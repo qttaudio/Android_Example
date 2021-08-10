@@ -53,9 +53,9 @@ public class LoginActivity extends AppCompatActivity {
 
         mEdRoomName = findViewById(R.id.ed_room_name);
         final AppCompatButton btnJoinRoom = findViewById(R.id.btn_join_room);
-        String roomName = SpUtil.getString(this,Constant.SP_KEY_ROOM_NAME, "");
+        String roomName = SpUtil.getString(this, Constant.SP_KEY_ROOM_NAME, "");
         mEdRoomName.setText(roomName);
-        btnJoinRoom.setEnabled(roomName.length()>0);
+        btnJoinRoom.setEnabled(roomName.length() > 0);
         mEdRoomName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

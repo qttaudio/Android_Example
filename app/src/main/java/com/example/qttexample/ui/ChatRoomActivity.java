@@ -196,7 +196,9 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
             mRoomName = intent.getStringExtra(Constant.ROOM_NAME);
         }
         //设置音频质量
-        setAudioProfile(Constant.AUDIO_PROFILE_SPEECH_STANDARD, Constant.AUDIO_SCENARIO_CHATROOM_GAMING);
+        AudioQuality quality = AudioQuality.AUDIO_QUALITY_MUSIC_STEREO;
+        AudioMode mode = AudioMode.AUDIO_MODE_MIX;
+        mChannelEngine.setAudioConfig(quality, mode);
         //设置为观众,回调方法：
         //本地端-》onMuteStatusChanged(),uid==0
         //远端-》onMuteStatusChanged()
@@ -212,13 +214,6 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
         mChannelEngine.join(mRoomName, Constant.TOKEN);
     }
 
-    private int setAudioProfile(int profile, int scenario) {
-
-        AudioQuality quality = AudioQuality.AUDIO_QUALITY_MUSIC_STEREO;
-        AudioMode mode = AudioMode.AUDIO_MODE_MIX;
-
-        return mChannelEngine.setAudioConfig(quality, mode);
-    }
 
     /**
      * 发生频道消息
@@ -600,7 +595,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
 
     @Override
     public void onWarning(int i, String s) {
-        Log.d(TAG, "onWarning: code:"+i+",msg:"+s);
+        Log.d(TAG, "onWarning: code:" + i + ",msg:" + s);
     }
 
 

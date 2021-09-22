@@ -1,8 +1,14 @@
 package com.example.qttexample.ui;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -28,16 +34,22 @@ import com.example.qttexample.utils.SpUtil;
 import com.example.qttexample.utils.StatusBarUtil;
 import com.example.qttexample.utils.TimeUtil;
 import com.qttaudio.sdk.channel.AudioMode;
+import com.qttaudio.sdk.channel.AudioOutput;
+import com.qttaudio.sdk.channel.AudioParams;
 import com.qttaudio.sdk.channel.AudioQuality;
 import com.qttaudio.sdk.channel.ChannelEngine;
-import com.qttaudio.sdk.channel.ChannelFactory;
 import com.qttaudio.sdk.channel.ChannelObserver;
 import com.qttaudio.sdk.channel.ChannelRole;
 import com.qttaudio.sdk.channel.LogLevel;
 import com.qttaudio.sdk.channel.RtcStat;
 import com.qttaudio.sdk.channel.VolumeInfo;
+import com.qttaudio.sdk.headset.HeadsetPlugManager;
+import com.qttaudio.sdk.headset.IHeadsetPlugListener;
 
-import java.util.Random;
+import java.lang.reflect.Field;
+
+import static com.example.qttexample.utils.Constant.WHAT_ON_OVER_CONN;
+import static com.example.qttexample.utils.Constant.WHAT_ON_RECONN;
 
 public class ChatRoomActivity extends FragmentActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener, ChannelObserver {
 
@@ -174,15 +186,12 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
      */
     private void initEngine() {
         try {
-            ChannelFactory.SetContext(getBaseContext());
-            ChannelFactory.SetAppkey(Constant.APP_KEY);//APPKEY
-            ChannelFactory.SetLogFile(FileUtil.initLogFile(this, 0));//LOG日志路径
-            mChannelEngine = ChannelFactory.GetChannelInstance();
+            ChannelEngine.SetLogLevel(LogLevel.LOG_DEBUG);
+            ChannelEngine.SetLogFile(FileUtil.initLogFile(this, 0));//LOG日志路径
+            mChannelEngine = ChannelEngine.GetChannelInstance(getBaseContext(),Constant.APP_KEY,this);
             if (null == mChannelEngine) {
                 throw new Exception("QTT初始化失败");
             }
-            //实现ChannelObserver
-            mChannelEngine.setObserver(this);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -198,10 +207,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
             mRoomName = intent.getStringExtra(Constant.ROOM_NAME);
         }
         //设置音频质量
-        AudioQuality quality = AudioQuality.AUDIO_QUALITY_MUSIC_STEREO;
-        AudioMode mode = AudioMode.AUDIO_MODE_MIX;
-        mChannelEngine.setAudioConfig(quality, mode);
-        mChannelEngine.setUid(new Random().nextInt());
+        setAudioProfile(Constant.AUDIO_PROFILE_SPEECH_STANDARD, Constant.AUDIO_SCENARIO_CHATROOM_GAMING);
         //设置为观众,回调方法：
         //本地端-》onMuteStatusChanged(),uid==0
         //远端-》onMuteStatusChanged()
@@ -210,13 +216,20 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
         mChannelEngine.setSpeakerOn(true);
         //开启人声检测，延迟500ms
         //回调方法：onTalking()
-        mChannelEngine.setVolumeDectection(500);
+        mChannelEngine.setVolumeDetection(500);
         //回调方法:
         //本地端-》onJoinSuccess(...,boolean isReconnect),参数isReconnect：false代表加入房间，true代表断线重连
         //远端-》onOtherJoin()
-        mChannelEngine.join(mRoomName, Constant.TOKEN);
+        mChannelEngine.join(Constant.TOKEN, mRoomName, 0);
     }
 
+    private int setAudioProfile(int profile, int scenario) {
+
+        AudioQuality quality = AudioQuality.AUDIO_QUALITY_MUSIC_STEREO;
+        AudioMode mode = AudioMode.AUDIO_MODE_MIX;
+
+        return mChannelEngine.setAudioConfig(quality, mode);
+    }
 
     /**
      * 发生频道消息
@@ -284,13 +297,13 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
                 break;
             case R.id.cb_close_mic://闭麦
                 //回调方法：onMuteStatusChanged() uid==0为本地用户
-                mChannelEngine.mute(0, isChecked);
+                mChannelEngine.muteLocalAudio(isChecked);
                 mCbCloseMic.setText(isChecked ? "开麦" : "静麦");
                 mMicItemAdapter.enableCloseMic(myUid, isChecked);
                 break;
             case R.id.cb_remote_mute://关闭声音-》屏蔽所有人的声音
                 isAllRemoteMute = isChecked;
-                mChannelEngine.muteAllRemote(isChecked);
+                mChannelEngine.muteAllRemoteAudio(isChecked);
                 mCbRemoteMute.setText(isChecked ? "开启声音" : "关闭声音");
                 break;
             case R.id.cb_speaker://外放
@@ -350,57 +363,64 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ChannelFactory.Destroy();
+
+        ChannelEngine.Destroy();
     }
 
 
     /**
      * 加入房间成功
      *
-     * @param roomName    房间名
-     * @param uid         id
-     * @param role        角色 主播/观众
-     * @param mute        true 静音 false 非静音
-     * @param isReconnect true 重新连接  false 加入房间
+     * @param roomName 房间名
+     * @param uid      id
+     * @param role     角色 主播/观众
+     * @param mute     true 静音 false 非静音
      */
     @Override
-    public void onJoinSuccess(final String roomName, final long uid, final ChannelRole role, final boolean mute, boolean isReconnect) {
+    public void onJoinSuccess(final String roomName, final long uid, ChannelRole role, boolean mute) {
         if (mIsLeave) {
             return;
         }
         mRoomName = roomName;
         Log.e(TAG, "onJoinSuccess roomId:" + roomName + "   uid:" + uid + "  role:" + role + "  ");
-        if (isReconnect) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(ChatRoomActivity.this, "重连成功", Toast.LENGTH_SHORT).show();
-                    /**
-                     * 断线重连后，如果重连前和重连后角色状态一样，不走onSelfRoleChanged
-                     * 比如：断线前主播，重连后主播
-                     * */
-                    if ((isBroadcaster && role.value() != 0) || !isBroadcaster && role.value() != 1) {
-                        onRoleStatusChanged(0, role);
-                    }
-                    mMicItemAdapter.enableCloseMic(uid, mute);
-                }
-            });
-            mReJoinCount = 0;
-        } else {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    myUid = uid;
-                    mTvRoomNumber.setText(roomName);
-                    sendChannelMsg(uid + "(我)进入房间了.");
-                    setChannelPeopleCount(true);
-                    mMicItemAdapter.setUid(uid);
-                    SpUtil.putString(ChatRoomActivity.this, Constant.SP_KEY_ROOM_NAME, roomName);
-                }
-            });
-        }
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                myUid = uid;
+                mTvRoomNumber.setText(roomName);
+                sendChannelMsg(uid + "(我)进入房间了.");
+                setChannelPeopleCount(true);
+                mMicItemAdapter.setUid(uid);
+                SpUtil.putString(ChatRoomActivity.this, Constant.SP_KEY_ROOM_NAME, roomName);
+            }
+        });
+
     }
 
+    /**
+     * @param roomName 房间名
+     * @param uid      id
+     * @param role     角色 主播/观众
+     * @param mute     true 静音 false 非静音
+     */
+    @Override
+    public void onReJoinSuccess(String roomName, final long uid, final ChannelRole role, final boolean mute) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(ChatRoomActivity.this, "重连成功", Toast.LENGTH_SHORT).show();
+                /**
+                 * 断线重连后，如果重连前和重连后角色状态一样，不走onSelfRoleChanged
+                 * 比如：断线前主播，重连后主播
+                 * */
+                if ((isBroadcaster && role.value() != 0) || !isBroadcaster && role.value() != 1) {
+                    onRoleStatusChanged(0, role);
+                }
+                mMicItemAdapter.enableCloseMic(uid, mute);
+            }
+        });
+        mReJoinCount = 0;
+    }
 
     /**
      * 远端用户加入房间
@@ -450,7 +470,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
      * @param size        volumeInfos长度
      */
     @Override
-    public void onTalking(final VolumeInfo[] volumeInfos, final int size) {
+    public void onTalkingVolumeIndication(final VolumeInfo[] volumeInfos, final int size) {
         if (size < 1) {
             return;
         }
@@ -459,13 +479,13 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
             public void run() {
                 for (int i = 0; i < size; i++) {
                     VolumeInfo v = volumeInfos[i];
-                    Log.d(TAG, "onTalking: uid: " + v.uid + " volume: " + v.volume);
-                    mMicItemAdapter.updateVolume(v.uid == 0 ? myUid : v.uid, v.uid != 0 && isAllRemoteMute ? 0 : v.volume);
+                    mMicItemAdapter.updateVolume(v.uid == 0 ? myUid : v.uid, isAllRemoteMute ? 0 : v.volume);
                 }
                 mMicItemAdapter.notifyDataSetChanged();
             }
         });
     }
+
 
     /**
      * 静麦回调
@@ -546,7 +566,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
      */
     @Override
     public void onOtherLeave(final long l, final ChannelRole channelRole) {
-        Log.d(TAG, "onOtherLeave: " + l);
+        Log.d(TAG, "onOtherMuted: " + l);
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -559,6 +579,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
             }
         });
     }
+
 
     /**
      * 连接中断
@@ -599,7 +620,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
 
     @Override
     public void onWarning(int i, String s) {
-        Log.d(TAG, "onWarning: code:" + i + ",msg:" + s);
+
     }
 
 
@@ -634,7 +655,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
                     @Override
                     public void run() {
                         if (mMusicControl.getMusicPlayState() == MusicControlLayout.MusicPlayState.START) {
-                            mMusicControl.resetMusicProgress(mChannelEngine.getSoundDuration());
+                            mMusicControl.resetMusicProgress(mChannelEngine.getSoundMixingDuration());
                         }
                         mMusicControl.updateMusicProgress();
                         setBmgViewStyle(true);

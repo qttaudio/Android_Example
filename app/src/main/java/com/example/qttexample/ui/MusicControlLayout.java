@@ -121,7 +121,7 @@ public class MusicControlLayout implements View.OnClickListener, SeekBar.OnSeekB
                 @Override
                 public void run() {
                     if (musicPlayState == MusicPlayState.START || musicPlayState == MusicPlayState.RESUME) {
-                        updateMusicProgress(mChannelEngine.getSoundPosition());
+                        updateMusicProgress(mChannelEngine.getSoundMixingCurrentPosition());
                         handler.postDelayed(updateMusicRunnable, 1000);
                     } else {
                         handler.removeCallbacks(updateMusicRunnable);
@@ -148,7 +148,7 @@ public class MusicControlLayout implements View.OnClickListener, SeekBar.OnSeekB
      */
     public void stopMusic() {
         if (musicPlayState != MusicPlayState.STOP) {
-            mChannelEngine.stopSound();
+            mChannelEngine.stopSoundMixing();
             musicPlayState = MusicPlayState.STOP;
             mIvPlayMusic.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.play));
         }
@@ -175,18 +175,18 @@ public class MusicControlLayout implements View.OnClickListener, SeekBar.OnSeekB
                     //code 4:播放完成回调
                 if (musicPlayState == MusicPlayState.START || musicPlayState == MusicPlayState.RESUME) {
                     musicPlayState = MusicPlayState.PAUSE;
-                    mChannelEngine.pauseSound();
+                    mChannelEngine.pauseSoundMixing();
                     mIvPlayMusic.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.play));
                 } else if (musicPlayState == MusicPlayState.PAUSE) {
                     musicPlayState = MusicPlayState.RESUME;
-                    mChannelEngine.resumeSound();
+                    mChannelEngine.resumeSoundMixing();
                     mIvPlayMusic.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.pause));
                 } else {
                     musicPlayState = MusicPlayState.START;
                     String fileName = mContext.getFilesDir().getAbsolutePath() + "/夜的钢琴曲.mp3";
-                    mChannelEngine.playSound(fileName, 1, true);
-                    mChannelEngine.setSoundPublishVolume(musicVolume);//设置远端音乐音量
-                    mChannelEngine.setSoundPlayoutVolume(musicVolume);//设置本地端音乐音量
+                    mChannelEngine.startSoundMixing(fileName, 1, true);
+                    mChannelEngine.adjustSoundMixingPublishVolume(musicVolume);//设置远端音乐音量
+                    mChannelEngine.adjustSoundMixingPlayoutVolume(musicVolume);//设置本地端音乐音量
                     mIvPlayMusic.setImageDrawable(mContext.getResources().getDrawable(R.mipmap.pause));
                 }
                 break;
@@ -212,13 +212,13 @@ public class MusicControlLayout implements View.OnClickListener, SeekBar.OnSeekB
                 /*人声音量*/
                 mSbVocal.setProgress(progress);
                 mTvVocal.setText("" + progress);
-                mChannelEngine.adjustMicVolume(progress);
+                mChannelEngine.adjustRecordingVolume(progress);
                 break;
             case R.id.sb_music_volume:        //音乐音量调节
                 musicVolume = progress;
                 mSbMusicVolume.setProgress(progress);
                 mTvMusicVolume.setText("" + musicVolume);
-                mChannelEngine.setSoundVolume(musicVolume);
+                mChannelEngine.adjustSoundMixingVolume(musicVolume);
                 break;
             case R.id.sb_tone:        //音调调节
                 //-12 - 0 - 12
@@ -229,7 +229,7 @@ public class MusicControlLayout implements View.OnClickListener, SeekBar.OnSeekB
                 }
                 mSbTone.setProgress(progress);
                 mTvTone.setText("" + pitch);
-                mChannelEngine.setSoundPitch(pitch);
+                mChannelEngine.setSoundMixingPitch(pitch);
                 break;
             case R.id.sb_music_progress:
                 break;
@@ -246,7 +246,7 @@ public class MusicControlLayout implements View.OnClickListener, SeekBar.OnSeekB
         isStartTrack = false;
         if (seekBar.getId() == R.id.sb_music_progress) {
             updateMusicProgress(currentProgress);
-            mChannelEngine.setSoundPosition(currentProgress);
+            mChannelEngine.setSoundMixingPosition(currentProgress);
         }
     }
 

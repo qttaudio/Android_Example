@@ -479,7 +479,7 @@ public class ChatRoomActivity extends FragmentActivity implements View.OnClickLi
             public void run() {
                 for (int i = 0; i < size; i++) {
                     VolumeInfo v = volumeInfos[i];
-                    mMicItemAdapter.updateVolume(v.uid == 0 ? myUid : v.uid, isAllRemoteMute ? 0 : v.volume);
+                    mMicItemAdapter.updateVolume(v.uid == 0 ? myUid : v.uid&0xffffffffL, isAllRemoteMute ? 0 : v.volume);
                 }
                 mMicItemAdapter.notifyDataSetChanged();
             }

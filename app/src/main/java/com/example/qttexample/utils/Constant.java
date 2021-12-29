@@ -7,8 +7,13 @@ import java.lang.reflect.Method;
 
 public class Constant {
 
+    /*
+    * https://console.qttaudio.com/#/overview/overview
+    * appkey到控制台申请
+    * */
     public static final String APP_KEY="";
 
+    /*可以不用填*/
     public static final String TOKEN="";
 
     public static final String ROOM_NAME="room_name";

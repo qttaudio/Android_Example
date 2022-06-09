@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     // 要申请的权限
     private String[] permissions = {Manifest.permission.RECORD_AUDIO,
             Manifest.permission.CALL_PHONE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.BLUETOOTH_CONNECT};
     private String[] musicPaths = {"/assets/夜的钢琴曲.mp3", "/assets/10190.mp3", "/assets/4789.mp3"};
     private AppCompatEditText mEdRoomName;
 

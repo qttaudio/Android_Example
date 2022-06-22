@@ -11,7 +11,7 @@ public class Constant {
     * https://console.qttaudio.com/#/overview/overview
     * appkey到控制台申请
     * */
-    public static final String APP_KEY="923ed094330a06b7c75e41332219774b";
+    public static final String APP_KEY="";
 
     /*可以不用填*/
     public static final String TOKEN="";
